@@ -1,0 +1,111 @@
+{
+ "primary_metric": "roc_auc",
+ "direction": "max",
+ "metric_labels": {
+  "roc_auc": "AUC ROC",
+  "average_precision": "Précision moyenne (AP)",
+  "auc_gain_vs_baseline": "Gain d'AUC vs XGBoost",
+  "expected_calibration_error": "Erreur de calibration (ECE)"
+ },
+ "dataset": {
+  "name": "pytorch-lifestream/rosbank-churn",
+  "config": "train",
+  "split": "train (test : 20% des clients étiquetés)",
+  "n_examples": 300
+ },
+ "approaches": [
+  {
+   "name": "XGBoost sur agrégats",
+   "role": "reference",
+   "metrics": {
+    "auc_gain_vs_baseline": null,
+    "roc_auc": 0.8257957100868225,
+    "average_precision": 0.8488290928816531,
+    "expected_calibration_error": 0.11726695910096169
+   },
+   "ci95": {
+    "roc_auc": [
+     0.7853454351425171,
+     0.869275689125061
+    ],
+    "average_precision": [
+     0.7949509635723311,
+     0.9033202132624847
+    ],
+    "expected_calibration_error": [
+     0.08452642713983854,
+     0.15798539504408837
+    ]
+   },
+   "latency_ms": {
+    "p50": 0.01,
+    "p95": 0.02,
+    "n": 5
+   },
+   "notes": "Budget de 500 étiquettes, moyenne de 2 tirages appariés ; 183 agrégats, arrêt précoce sur 15 % du budget."
+  },
+  {
+   "name": "XGBoost + Transformer (fusion des rangs)",
+   "role": "new",
+   "metrics": {
+    "auc_gain_vs_baseline": 0.009620577096939087,
+    "roc_auc": 0.8354162871837616,
+    "average_precision": 0.8638011170411236,
+    "expected_calibration_error": 0.06744722403741131
+   },
+   "ci95": {
+    "roc_auc": [
+     0.793757826089859,
+     0.8778056800365448
+    ],
+    "average_precision": [
+     0.811718894037157,
+     0.913300444414516
+    ],
+    "expected_calibration_error": [
+     0.06500417018774898,
+     0.11937916853465141
+    ],
+    "auc_gain_vs_baseline": [
+     -0.007741332054138184,
+     0.027936607599258423
+    ]
+   },
+   "latency_ms": {
+    "p50": 1.06,
+    "p95": 1.1,
+    "n": 5
+   },
+   "notes": "Budget de 500 étiquettes, moyenne de 2 tirages appariés ; Transformer de 0.35 M de paramètres ; rangs calculés sur le lot de test (score non calibré). Transformer seul : AUC 0.810."
+  }
+ ],
+ "phase": "public",
+ "scale": "reduced",
+ "seed": 42,
+ "date": "2026-11-18T03:44:10+00:00",
+ "environment": {
+  "python": "3.12.16",
+  "system": "Linux-7.0.0-1019-azure-x86_64-with-glibc2.41",
+  "cpu": 4,
+  "ram_gb": 15.6,
+  "device": "cpu",
+  "gpu": null,
+  "scale": "reduced",
+  "versions": {
+   "torch": "2.15.0+cpu",
+   "transformers": "5.23.0",
+   "datasets": "5.2.0",
+   "sentence-transformers": "6.3.0",
+   "scikit-learn": "1.9.1",
+   "numpy": "2.5.5",
+   "pandas": "3.1.1",
+   "openai": "3.54.0",
+   "xgboost": "3.4.1"
+  }
+ },
+ "service_calls": {
+  "n": 0,
+  "failures": 0,
+  "seconds": 0
+ }
+}
